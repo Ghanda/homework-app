@@ -1,0 +1,23 @@
+.console
+{
+	width:750px;
+	height:300px;
+	background-color: black;
+	color:green;
+	padding:7px;
+	margin:10px;
+	border:2px solid green;
+}
+
+.myframe
+{
+	width:100%;
+	height:100%;
+	border:2px solid black;
+}
+
+.resizable
+{
+    resize: both;
+    overflow: auto;
+}
