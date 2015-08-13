@@ -8,7 +8,7 @@
 			restrict: 'E',
 			templateUrl: 'templates/homeworks.html',
 			replace: true,
-			controller: function($http)
+			controller: function($http, $sce)
 			{
 				var hws = this;
 				hws.homeworks = [];
@@ -19,11 +19,16 @@
 					hws.homeworks = data;
 				});
 
-				this.link="http://ocw.cs.pub.ro/courses/uso/tema-1";
+				function trust(link)
+				{
+					return $sce.trustAsResourceUrl(link);
+				}
+
+				this.link=trust("http://ocw.cs.pub.ro/courses/uso/tema-1");
 				this.hwId='1';
 				this.setNewHw = function(link, hwId)
 				{
-					this.link = link;
+					this.link = trust(link);
 					this.hwId = hwId + 1;
 				};
 			},
