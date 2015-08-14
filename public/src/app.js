@@ -2,6 +2,45 @@
 {
 	var app = angular.module ('homeworks', []);
 
+	app.factory('socket', function socketFactory()
+	{
+		var myio = io();
+
+		var f = null;
+		myio.on('connect', function () 
+  		{
+  			console.log ('Established connection');
+  		});
+
+		myio.on("output", function(data)
+		{
+			
+			if (f)
+			{
+				f(data);
+			}
+		});
+
+  		return{
+  			sendKeys: function(keys)
+  			{
+  				//console.log (keys);
+  				myio.emit("input", {keys:keys});
+  			},
+
+  			start: function(col, row)
+  			{
+  				myio.emit("open", {cols: col, rows: row})
+  			},
+
+  			registerListener: function(func)
+  			{
+  				f = func;
+  			},
+  		};
+		
+	});
+
 	app.directive ('homeworks', function ()
 	{
 		return {
@@ -24,13 +63,20 @@
 					return $sce.trustAsResourceUrl(link);
 				}
 
-				this.link=trust("http://ocw.cs.pub.ro/courses/uso/tema-1");
+				this.link=trust("http://www.ee.surrey.ac.uk/Teaching/Unix/");
 				this.hwId='1';
 				this.setNewHw = function(link, hwId)
 				{
 					this.link = trust(link);
 					this.hwId = hwId + 1;
 				};
+
+				this.showMenu = function()
+				{
+					console.log("exist");
+					$('.ui.sidebar').sidebar('toggle');
+				};
+
 			},
 			controllerAs: 'hwsCtrl'
 		};
@@ -95,17 +141,43 @@
 		};
 	});
 
-	app.directive ('consola', function ()
+	app.directive ('consola', ['socket', function (socket)
 	{
 		return {
 			restrict: 'E',
 			templateUrl: 'templates/consola.html',
 			replace: true,
-			controller: function ()
+			scope:
 			{
-
+				name: "@"
 			},
+			controller: function ($scope)
+			{
+				setTimeout (function ()
+				{
+					var terminalContainer = document.getElementById($scope.name);
+	    			var term = new Terminal();
+	    			term.open(terminalContainer);
+	    			term.fit();
+	    			term.resize (term.cols-12, term.rows-2);
+	    			socket.start(term.cols, term.rows);
+	    	
+	    			var write = function(data)
+	    			{
+	    				term.write(data.keys);
+	    			};
+
+	    			socket.registerListener(write);
+
+	    			term.on('key', function (key, ev)
+	    			{
+	    				socket.sendKeys(key);
+	    			});
+
+				}, 1000);
+			},
+			
 			controllerAs: 'consoleCtrl'
 		};
-	});
+	}]);
 })();

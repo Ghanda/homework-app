@@ -1,22 +1,53 @@
-<div class="ui grid">
+<div>
+	
+	<menu hws="hwsCtrl.homeworks" 
+		new-link="hwsCtrl.setNewHw(link, hwId)">
+	</menu>
 
-	<div class="row">
-		<div class="column five wide"> 
-			<menu hws="hwsCtrl.homeworks" 
-				new-link="hwsCtrl.setNewHw(link, hwId)">
-			</menu>
-		</div>	
+  		
+	<div class="pusher">
 
-		<div class="column ten wide">
-			<enunt link="hwsCtrl.link" 
-					hw-id="hwsCtrl.hwId">
-			</enunt>
+		<div class="ui grid">
+
+			<div class="column three wide">
+
+				<div class="row">
+					<button class="ui button blue"
+							ng-click="hwsCtrl.showMenu()">
+  						<i class="list layout icon"></i>
+  						Show Menu
+					</button>
+				</div>
+			</div>
+
+			<div class="column two wide"></div>
+
+			<div class="column eight wide">
+				<div class="row">
+					<h4 class="ui header icon" style="padding-left:10px;">
+					<i class="keyboard icon"> 
+						<i class="ui header">USO Homeworks</i>
+					</i>
+					</h4>
+				</div>
+			</div>
 		</div>
-	</div>
 
-	<div class="row">
-		<div class="column fourteen wide">
-			<consola></consola>
+		<div class="ui grid">
+			<div class="column"></div>
+			
+			<div class="column seven wide">
+				<enunt link="hwsCtrl.link" 
+						hw-id="hwsCtrl.hwId">
+				</enunt>
+			</div>
+
+			<div class="column seven wide">
+				<consola name="whatever"></consola>
+			</div>
+
+			<div class="column"></div>
 		</div>
+
 	</div>
 </div>
